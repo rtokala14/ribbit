@@ -83,11 +83,11 @@ export function Sidebar() {
         <User className=" h-8 w-8" />
         <h3 className="hidden lg:block">Profile</h3>
       </Link>
-      <Link
-        href={"/"}
-        className="dropdown-right dropdown flex items-center gap-2 rounded-full p-2 hover:bg-base-200 lg:rounded-lg"
-      >
-        <div>
+      <div className="dropdown-right dropdown hover:cursor-pointer">
+        <div
+          tabIndex={0}
+          className=" flex items-center gap-2 rounded-full p-2 hover:bg-base-200 lg:rounded-lg"
+        >
           <MoreHorizontal className=" h-8 w-8 " />
           <h3 className="hidden lg:block">Settings</h3>
         </div>
@@ -99,7 +99,7 @@ export function Sidebar() {
             <ThemeToggle />
           </li>
         </ul>
-      </Link>
+      </div>
       <Link
         href={"/"}
         className="flex items-center gap-2 rounded-full p-2 hover:bg-base-200 lg:rounded-lg"
