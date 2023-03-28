@@ -8,6 +8,7 @@ const config = {
   daisyui: {
     themes: ["fantasy", "halloween"],
   },
+  darkMode: ["class", "[data-theme='halloween']"],
 };
 
 module.exports = config;
