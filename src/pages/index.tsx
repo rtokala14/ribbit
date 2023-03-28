@@ -12,6 +12,9 @@ import {
 import Link from "next/link";
 
 import Logo from "../../public/Logo.webp";
+import { useEffect } from "react";
+import { themeChange } from "theme-change";
+import ThemeToggle from "~/components/ThemeToggle";
 
 const Home: NextPage = () => {
   return (
@@ -31,10 +34,19 @@ const Home: NextPage = () => {
 export default Home;
 
 export function Sidebar() {
+  useEffect(() => {
+    themeChange(false);
+  }, []);
   return (
     <div className=" flex flex-col items-center gap-4 lg:items-start">
       <Link href={"/"}>
-        <Image alt="Ribbit logo" src={Logo} width={80} height={80} />
+        <Image
+          alt="Ribbit logo"
+          priority={true}
+          src={Logo}
+          width={80}
+          height={80}
+        />
       </Link>
       <Link
         href={"/"}
@@ -81,15 +93,10 @@ export function Sidebar() {
         </div>
         <ul
           tabIndex={0}
-          className="dropdown-content menu rounded-box w-52 bg-base-100 p-4 shadow"
+          className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
         >
           <li>
-            <div>
-              <label className="label cursor-pointer">
-                <span className="label-text">Dark Mode</span>
-                <input type="checkbox" className="toggle" checked />
-              </label>
-            </div>
+            <ThemeToggle />
           </li>
         </ul>
       </Link>
