@@ -11,14 +11,15 @@ function ThemeToggle() {
     setTheme((theme) => (theme === "fantasy" ? "halloween" : "fantasy"));
   };
   return (
-    <button
-      //   className="toggle"
-      // data-key={"ribbit-theme"}
-      // data-toggle-theme="fantasy,halloween"
-      onClick={toggleTheme}
-    >
-      Toggle Dark Mode
-    </button>
+    <label className="label flex cursor-pointer items-center justify-between">
+      <span className="label-text">Dark Theme</span>
+      <input
+        type="checkbox"
+        className="toggle"
+        onClick={toggleTheme}
+        checked={theme === "halloween"}
+      />
+    </label>
   );
 }
 
