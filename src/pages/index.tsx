@@ -12,8 +12,6 @@ import {
 import Link from "next/link";
 
 import Logo from "../../public/Logo.webp";
-import { useEffect } from "react";
-import { themeChange } from "theme-change";
 import ThemeToggle from "~/components/ThemeToggle";
 
 const Home: NextPage = () => {
@@ -34,9 +32,6 @@ const Home: NextPage = () => {
 export default Home;
 
 export function Sidebar() {
-  useEffect(() => {
-    themeChange(false);
-  }, []);
   return (
     <div className=" flex flex-col items-center gap-4 lg:items-start">
       <Link href={"/"}>
