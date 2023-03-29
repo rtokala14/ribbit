@@ -216,7 +216,7 @@ export function Timeline() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col">
           {tweetsData?.map((tweet) => (
             <Tweet key={tweet.id} tweet={tweet} />
           ))}
@@ -228,7 +228,54 @@ export function Timeline() {
 
 type Tweet = RouterOutputs["tweets"]["getAll"][0];
 function Tweet({ tweet }: { tweet: Tweet }) {
-  return <div>{tweet.content}</div>;
+  return (
+    <div className="flex w-full items-center border-b border-b-neutral-content">
+      <div className=" flex flex-col items-center self-start p-2">
+        <div className="avatar self-start">
+          <div className=" w-10 rounded-full">
+            <Image
+              alt={`${tweet.author.name ?? ""}'s profile picture`}
+              src={
+                tweet.author.image ??
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
+              }
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex grow flex-col py-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <h3 className="text-base font-semibold">{tweet.author.name}</h3>
+            <span className="text-xs font-light text-neutral-content">
+              @{tweet.author.name}
+            </span>
+            <span className="text-xs font-light text-neutral-content">
+              {tweet.createdAt.getTimezoneOffset()}
+            </span>
+          </div>
+          <div className="dropdown dropdown-bottom dropdown-end">
+            <label tabIndex={0} className="btn-ghost btn-sm btn rounded-full">
+              <MoreHorizontal className="h-5 w-5" />
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu rounded-box w-40 bg-base-100 p-2 shadow"
+            >
+              <li>
+                <a>To be filled</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="">
+          <p className="text-base">{tweet.content}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function RightSidebar() {
