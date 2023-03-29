@@ -16,7 +16,7 @@ function ThemeToggle() {
       <input
         type="checkbox"
         className="toggle"
-        onClick={toggleTheme}
+        onChange={toggleTheme}
         checked={theme === "halloween"}
       />
     </label>

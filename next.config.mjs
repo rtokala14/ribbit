@@ -25,5 +25,8 @@ const config = {
     ignoreDuringBuilds: true,
   },
   swcMinify: true,
+  images: {
+    domains: ["cdn.discordapp.com"],
+  },
 };
 export default config;
