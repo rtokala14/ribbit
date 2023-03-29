@@ -10,12 +10,16 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useState } from "react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 import Logo from "../../public/Logo.webp";
 import ThemeToggle from "~/components/ThemeToggle";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { type RouterOutputs, api } from "~/utils/api";
-import { useState } from "react";
+
+dayjs.extend(relativeTime);
 
 const Home: NextPage = () => {
   return (
@@ -282,8 +286,8 @@ function Tweet({ tweet }: { tweet: Tweet }) {
           <div className="flex items-center gap-1">
             <h3 className="text-base font-semibold">{tweet.author.name}</h3>
             <span className="text-xs font-light">@{tweet.author.name}</span>
-            <span className="text-xs font-light">
-              {tweet.createdAt.getTimezoneOffset()}
+            <span className="text-xs font-extralight">
+              {dayjs(tweet.createdAt).fromNow()}
             </span>
           </div>
           <div className="dropdown dropdown-bottom dropdown-end">
