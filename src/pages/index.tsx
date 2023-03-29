@@ -14,12 +14,12 @@ import Link from "next/link";
 import Logo from "../../public/Logo.webp";
 import ThemeToggle from "~/components/ThemeToggle";
 import { signIn, useSession } from "next-auth/react";
-import { RouterOutputs, api } from "~/utils/api";
+import { type RouterOutputs, api } from "~/utils/api";
 import { useState } from "react";
 
 const Home: NextPage = () => {
   return (
-    <main className="flex min-h-screen justify-center gap-4">
+    <main className="flex min-h-screen w-full justify-center gap-4">
       {/* Sidebar */}
       <Sidebar />
       <div className="min-h-screen w-full border-x border-neutral-content md:max-w-2xl lg:max-w-3xl">
@@ -35,8 +35,10 @@ const Home: NextPage = () => {
 export default Home;
 
 export function Sidebar() {
+  const { data: sessionData } = useSession();
+
   return (
-    <div className=" flex flex-col items-center gap-4 lg:items-start">
+    <div className="sticky top-0 flex max-h-screen flex-col items-center gap-4 lg:items-start">
       <Link href={"/"}>
         <Image
           alt="Ribbit logo"
@@ -100,11 +102,26 @@ export function Sidebar() {
       </div>
       <Link
         href={"/"}
-        className="flex items-center gap-2 rounded-full p-2 hover:bg-base-200 lg:rounded-lg"
+        className="flex items-center gap-2 rounded-full bg-accent p-2 hover:bg-base-200 dark:bg-primary dark:text-base-100 lg:rounded-lg"
       >
-        <PlusCircle className=" h-8 w-8" />
+        <PlusCircle className=" h-8 w-8 " />
         <h3 className="hidden lg:block">Create New</h3>
       </Link>
+      <div className="avatar mt-auto mb-4">
+        <div className=" w-12 rounded-full hover:cursor-pointer">
+          <Image
+            src={
+              sessionData?.user.image ??
+              "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
+            }
+            width={24}
+            height={24}
+            draggable={false}
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
+            alt={`${sessionData?.user.name ?? ""}'s profile picture`}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -249,10 +266,8 @@ function Tweet({ tweet }: { tweet: Tweet }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             <h3 className="text-base font-semibold">{tweet.author.name}</h3>
-            <span className="text-xs font-light text-neutral-content">
-              @{tweet.author.name}
-            </span>
-            <span className="text-xs font-light text-neutral-content">
+            <span className="text-xs font-light">@{tweet.author.name}</span>
+            <span className="text-xs font-light">
               {tweet.createdAt.getTimezoneOffset()}
             </span>
           </div>
@@ -279,5 +294,5 @@ function Tweet({ tweet }: { tweet: Tweet }) {
 }
 
 export function RightSidebar() {
-  return <div className="hidden lg:flex">Right Sidebar</div>;
+  return <div className="hidden xl:flex">Right Sidebar</div>;
 }
