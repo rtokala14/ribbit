@@ -13,7 +13,7 @@ import Link from "next/link";
 
 import Logo from "../../public/Logo.webp";
 import ThemeToggle from "~/components/ThemeToggle";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { type RouterOutputs, api } from "~/utils/api";
 import { useState } from "react";
 
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
 export default Home;
 
 export function Sidebar() {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession();
 
   return (
     <div className="sticky top-0 flex max-h-screen flex-col items-center gap-4 lg:items-start">
@@ -107,21 +107,34 @@ export function Sidebar() {
         <PlusCircle className=" h-8 w-8 " />
         <h3 className="hidden lg:block">Create New</h3>
       </Link>
-      <div className="avatar mt-auto mb-4">
-        <div className=" w-12 rounded-full hover:cursor-pointer">
-          <Image
-            src={
-              sessionData?.user.image ??
-              "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
-            }
-            width={24}
-            height={24}
-            draggable={false}
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
-            alt={`${sessionData?.user.name ?? ""}'s profile picture`}
-          />
+      {status === "authenticated" && (
+        <div className="dropdown dropdown-top avatar mt-auto mb-4">
+          <div tabIndex={0} className=" w-12 rounded-full hover:cursor-pointer">
+            <Image
+              src={
+                sessionData?.user.image ??
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
+              }
+              width={24}
+              height={24}
+              draggable={false}
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
+              alt={`${sessionData?.user.name ?? ""}'s profile picture`}
+            />
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu rounded-box z-20 w-52 overflow-hidden bg-base-100 p-2 shadow"
+          >
+            <li>
+              <button
+                onClick={() => void signOut()}
+                className=" btn capitalize text-red-400"
+              >{`Logout @${sessionData?.user.name ?? ""}`}</button>
+            </li>
+          </ul>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -168,47 +181,49 @@ export function Timeline() {
       </h2>
       {/* Create Tweet box */}
       <div className="border-b border-b-neutral-content">
-        <div className="flex w-full items-center ">
-          <div className="flex h-full grow flex-col self-start p-2">
-            <div className="avatar">
-              <div className=" w-12 rounded-full">
-                <Image
-                  src={
-                    sessionData?.user.image ??
-                    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
-                  }
-                  width={24}
-                  height={24}
-                  draggable={false}
-                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
-                  alt={`${sessionData?.user.name ?? ""}'s profile picture`}
+        {status === "authenticated" && (
+          <div className="flex w-full items-center ">
+            <div className="flex h-full grow flex-col self-start p-2">
+              <div className="avatar">
+                <div className=" w-12 rounded-full">
+                  <Image
+                    src={
+                      sessionData?.user.image ??
+                      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
+                    }
+                    width={24}
+                    height={24}
+                    draggable={false}
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN0dnffAwADNQGPiCXt9AAAAABJRU5ErkJggg=="
+                    alt={`${sessionData?.user.name ?? ""}'s profile picture`}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex w-full">
+              <div className="flex grow flex-col gap-2 p-2">
+                <textarea
+                  placeholder="What's happening?"
+                  rows={3}
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  wrap="soft"
+                  className="textarea w-full grow resize-none text-base outline-none focus:outline-none"
                 />
+                <div className="divider m-0 px-2"></div>
+                <button
+                  onClick={() => {
+                    void createTweet({ text: inputText });
+                    setInputText("");
+                  }}
+                  className="btn-accent btn-sm btn self-end rounded-md text-base capitalize dark:btn-primary"
+                >
+                  Create
+                </button>
               </div>
             </div>
           </div>
-          <div className="flex w-full">
-            <div className="flex grow flex-col gap-2 p-2">
-              <textarea
-                placeholder="What's happening?"
-                rows={3}
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                wrap="soft"
-                className="textarea w-full grow resize-none text-base outline-none focus:outline-none"
-              />
-              <div className="divider m-0 px-2"></div>
-              <button
-                onClick={() => {
-                  void createTweet({ text: inputText });
-                  setInputText("");
-                }}
-                className="btn-accent btn-sm btn self-end rounded-md text-base capitalize dark:btn-primary"
-              >
-                Create
-              </button>
-            </div>
-          </div>
-        </div>
+        )}
         {status === "unauthenticated" && (
           <div className="flex w-full items-center justify-center gap-4 p-4">
             <button
@@ -248,7 +263,7 @@ function Tweet({ tweet }: { tweet: Tweet }) {
   return (
     <div className="flex w-full items-center border-b border-b-neutral-content">
       <div className=" flex flex-col items-center self-start p-2">
-        <div className="avatar self-start">
+        <div className="avatar -z-50">
           <div className=" w-10 rounded-full">
             <Image
               alt={`${tweet.author.name ?? ""}'s profile picture`}
