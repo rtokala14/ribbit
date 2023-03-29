@@ -14,6 +14,8 @@ import Link from "next/link";
 import Logo from "../../public/Logo.webp";
 import ThemeToggle from "~/components/ThemeToggle";
 import { signIn, useSession } from "next-auth/react";
+import { api } from "~/utils/api";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   return (
@@ -109,6 +111,10 @@ export function Sidebar() {
 
 export function Timeline() {
   const { data: sessionData, status } = useSession();
+
+  const [inputText, setInputText] = useState("");
+
+  const { mutateAsync: createTweet } = api.tweets.createTweet.useMutation();
   return (
     <div>
       <h2 className=" border-b border-neutral-content p-4 text-2xl font-semibold">
@@ -139,11 +145,19 @@ export function Timeline() {
               <textarea
                 placeholder="What's happening?"
                 rows={3}
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
                 wrap="soft"
                 className="textarea w-full grow resize-none text-base outline-none focus:outline-none"
               />
               <div className="divider m-0 px-2"></div>
-              <button className="btn-accent btn-sm btn self-end rounded-md text-base capitalize dark:btn-primary">
+              <button
+                onClick={() => {
+                  void createTweet({ text: inputText });
+                  setInputText("");
+                }}
+                className="btn-accent btn-sm btn self-end rounded-md text-base capitalize dark:btn-primary"
+              >
                 Create
               </button>
             </div>
@@ -161,8 +175,13 @@ export function Timeline() {
           </div>
         )}
       </div>
+      <Tweet />
     </div>
   );
+}
+
+function Tweet() {
+  return <div>Tweet</div>;
 }
 
 export function RightSidebar() {
