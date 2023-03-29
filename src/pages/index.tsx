@@ -133,7 +133,7 @@ export function Sidebar() {
             <li>
               <button
                 onClick={() => void signOut()}
-                className=" btn capitalize text-red-400"
+                className=" btn normal-case text-red-400"
               >{`Logout @${sessionData?.user.name ?? ""}`}</button>
             </li>
           </ul>
@@ -284,7 +284,9 @@ function Tweet({ tweet }: { tweet: Tweet }) {
       <div className="flex grow flex-col py-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <h3 className="text-base font-semibold">{tweet.author.name}</h3>
+            <h3 className="text-base font-semibold">
+              {tweet.author.displayName}
+            </h3>
             <span className="text-xs font-light">@{tweet.author.name}</span>
             <span className="text-xs font-extralight">
               {dayjs(tweet.createdAt).fromNow()}
