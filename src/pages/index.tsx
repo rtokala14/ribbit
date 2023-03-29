@@ -14,7 +14,7 @@ import Link from "next/link";
 import Logo from "../../public/Logo.webp";
 import ThemeToggle from "~/components/ThemeToggle";
 import { signIn, useSession } from "next-auth/react";
-import { api } from "~/utils/api";
+import { RouterOutputs, api } from "~/utils/api";
 import { useState } from "react";
 
 const Home: NextPage = () => {
@@ -114,7 +114,36 @@ export function Timeline() {
 
   const [inputText, setInputText] = useState("");
 
-  const { mutateAsync: createTweet } = api.tweets.createTweet.useMutation();
+  const ctx = api.useContext();
+  const { mutateAsync: createTweet } = api.tweets.createTweet.useMutation({
+    onSuccess: () => {
+      // Invalidate the getAll query
+      void ctx.tweets.getAll.invalidate();
+    },
+    onError: (err) => {
+      const errorMsg = err.data?.zodError?.fieldErrors.content;
+      if (errorMsg && errorMsg[0]) {
+        <div className="toast-start toast">
+          <div className="alert alert-info">
+            <div>
+              <span>{errorMsg[0]}</span>
+            </div>
+          </div>
+        </div>;
+      } else {
+        <div className="toast-start toast">
+          <div className="alert alert-error">
+            <div>
+              <span>{"Something went wrong. Please try again later."}</span>
+            </div>
+          </div>
+        </div>;
+      }
+    },
+  });
+
+  const { data: tweetsData, isLoading: isPostLoading } =
+    api.tweets.getAll.useQuery();
   return (
     <div>
       <h2 className=" border-b border-neutral-content p-4 text-2xl font-semibold">
@@ -175,13 +204,31 @@ export function Timeline() {
           </div>
         )}
       </div>
-      <Tweet />
+      {isPostLoading ? (
+        <div className="mt-4 flex items-center justify-center">
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {tweetsData?.map((tweet) => (
+            <Tweet key={tweet.id} tweet={tweet} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function Tweet() {
-  return <div>Tweet</div>;
+type Tweet = RouterOutputs["tweets"]["getAll"][0];
+function Tweet({ tweet }: { tweet: Tweet }) {
+  return <div>{tweet.content}</div>;
 }
 
 export function RightSidebar() {

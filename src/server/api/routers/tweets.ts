@@ -7,14 +7,22 @@ import {
 } from "~/server/api/trpc";
 
 export const tweetRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const { prisma } = ctx;
+
+    const res = await prisma.tweet.findMany({
+      include: {
+        author: true,
+      },
+    });
+
+    return res;
   }),
 
   createTweet: protectedProcedure
     .input(
       z.object({
-        text: z.string(),
+        text: z.string().min(1).max(300),
       })
     )
     .mutation(async ({ ctx, input }) => {
