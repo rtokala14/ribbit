@@ -4,12 +4,17 @@ import { type RouterOutputs } from "~/utils/api";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+// import { useRouter } from "next/router";
 dayjs.extend(relativeTime);
 
 type Tweet = RouterOutputs["tweets"]["getAll"][0];
 export default function Tweet({ tweet }: { tweet: Tweet }) {
+  //   const router = useRouter();
   return (
-    <div className="flex w-full items-center border-b border-b-neutral-content">
+    <div
+      //   onClick={() => void router.push(`/p/${tweet.id ?? ""}`)}
+      className="flex w-full items-center border-b border-b-neutral-content"
+    >
       <div className=" flex flex-col items-center self-start p-2">
         <div className="avatar -z-50">
           <div className=" w-10 rounded-full">

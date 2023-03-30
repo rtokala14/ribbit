@@ -1,4 +1,4 @@
-import { type NextPage } from "next";
+import { type GetServerSideProps, type NextPage } from "next";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { api } from "~/utils/api";
 import Tweet from "~/components/Tweet";
 import BaseLayout from "~/components/BaseLayout";
+import { getServerAuthSession } from "~/server/auth";
 
 dayjs.extend(relativeTime);
 
@@ -139,3 +140,10 @@ export function Timeline() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerAuthSession(ctx);
+  return {
+    props: { session },
+  };
+};
