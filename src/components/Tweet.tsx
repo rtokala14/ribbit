@@ -1,14 +1,25 @@
 import dayjs from "dayjs";
 import Image from "next/image";
-import { type RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 // import { useRouter } from "next/router";
 dayjs.extend(relativeTime);
 
 type Tweet = RouterOutputs["tweets"]["getAll"][0];
 export default function Tweet({ tweet }: { tweet: Tweet }) {
+  const { data: sessionData } = useSession();
+  const ctx = api.useContext();
+  const { mutateAsync: deleteMutation } = api.tweets.deleteTweet.useMutation({
+    onSuccess: async () => {
+      await ctx.tweets.getAll.invalidate();
+      await ctx.tweets.getPostsByUserId.invalidate({
+        userId: sessionData?.user.id ?? "",
+      });
+    },
+  });
   //   const router = useRouter();
   return (
     <div
@@ -45,17 +56,27 @@ export default function Tweet({ tweet }: { tweet: Tweet }) {
               {dayjs(tweet.createdAt).fromNow()}
             </span>
           </div>
-          <div className="dropdown dropdown-bottom dropdown-end">
+          <div className="dropdown-bottom dropdown-end dropdown">
             <label tabIndex={0} className="btn-ghost btn-sm btn rounded-full">
               <MoreHorizontal className="h-5 w-5" />
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu rounded-box w-40 bg-base-100 p-2 shadow"
+              className="dropdown-content menu rounded-box w-40 bg-base-300 p-2 shadow"
             >
               <li>
                 <a>To be filled</a>
               </li>
+              {sessionData?.user.id === tweet.author.id && (
+                <li>
+                  <button
+                    onClick={() => void deleteMutation({ id: tweet.id })}
+                    className=" btn normal-case text-red-400"
+                  >
+                    Delete Tweet
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
         </div>

@@ -78,4 +78,23 @@ export const tweetRouter = createTRPCRouter({
 
       return { res, uRes };
     }),
+
+  deleteTweet: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      const { prisma } = ctx;
+
+      const res = await prisma.tweet.delete({
+        where: {
+          id,
+        },
+      });
+
+      return res;
+    }),
 });

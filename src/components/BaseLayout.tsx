@@ -77,7 +77,7 @@ export function Sidebar() {
         <User className=" h-8 w-8" />
         <h3 className="hidden lg:block">Profile</h3>
       </Link>
-      <div className="dropdown-right dropdown hover:cursor-pointer">
+      <div className="dropdown dropdown-right hover:cursor-pointer">
         <div
           tabIndex={0}
           className=" flex items-center gap-2 rounded-full p-2 hover:bg-base-200 lg:rounded-lg"
@@ -87,7 +87,7 @@ export function Sidebar() {
         </div>
         <ul
           tabIndex={0}
-          className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
+          className="dropdown-content menu rounded-box w-52 bg-base-300 p-2 shadow"
         >
           <li>
             <ThemeToggle />
@@ -118,7 +118,7 @@ export function Sidebar() {
           </div>
           <ul
             tabIndex={0}
-            className="dropdown-content menu rounded-box z-20 w-52 overflow-hidden bg-base-100 p-2 shadow"
+            className="dropdown-content menu rounded-box z-20 w-52 overflow-hidden bg-base-300 p-2 shadow"
           >
             <li>
               <button
