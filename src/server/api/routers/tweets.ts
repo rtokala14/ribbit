@@ -65,6 +65,9 @@ export const tweetRouter = createTRPCRouter({
         include: {
           author: true,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
 
       const uRes = await prisma.user.findUnique({
