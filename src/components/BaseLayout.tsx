@@ -95,7 +95,7 @@ export function Sidebar() {
         </ul>
       </div>
       <Link
-        href={"/"}
+        href={"/create"}
         className="flex items-center gap-2 rounded-full bg-accent p-2 hover:bg-base-200 dark:bg-primary dark:text-base-100 lg:rounded-lg"
       >
         <PlusCircle className=" h-8 w-8 " />
