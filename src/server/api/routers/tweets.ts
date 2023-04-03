@@ -97,4 +97,26 @@ export const tweetRouter = createTRPCRouter({
 
       return res;
     }),
+
+  getPostByTweetId: publicProcedure
+    .input(
+      z.object({
+        tweetId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { tweetId } = input;
+      const { prisma } = ctx;
+
+      const res = await prisma.tweet.findUnique({
+        where: {
+          id: tweetId,
+        },
+        include: {
+          author: true,
+        },
+      });
+
+      return res;
+    }),
 });
