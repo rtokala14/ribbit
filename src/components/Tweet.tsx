@@ -2,7 +2,14 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { api, type RouterOutputs } from "~/utils/api";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { MoreHorizontal } from "lucide-react";
+import {
+  MoreHorizontal,
+  Repeat,
+  MessageSquare,
+  Heart,
+  Bookmark,
+  Share,
+} from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 // import { useRouter } from "next/router";
@@ -83,6 +90,27 @@ export default function Tweet({ tweet }: { tweet: Tweet }) {
         <Link href={`/p/${tweet.id}`} className="">
           <p className="text-base">{tweet.content}</p>
         </Link>
+        <div className=" flex w-full grow items-center justify-evenly py-1 px-2">
+          <div className="flex items-center gap-2 hover:cursor-pointer hover:text-orange-400">
+            <MessageSquare className="h-5 w-5" />
+            <span className="text-xs font-extralight">{"10"}</span>
+          </div>
+          <div className="flex items-center gap-2 hover:cursor-pointer hover:text-green-400">
+            <Repeat className="h-5 w-5" />
+            <span className="text-xs font-extralight">{"10"}</span>
+          </div>
+          <div className="flex items-center gap-2 hover:cursor-pointer hover:text-red-400">
+            <Heart className="h-5 w-5" />
+            <span className="text-xs font-extralight">{"10"}</span>
+          </div>
+          <div className="flex items-center gap-2 hover:cursor-pointer hover:text-blue-400">
+            <Bookmark className="h-5 w-5" />
+            <span className="text-xs font-extralight">{"10"}</span>
+          </div>
+          <div className="flex items-center gap-2 hover:cursor-pointer hover:text-purple-400">
+            <Share className="h-5 w-5" />
+          </div>
+        </div>
       </div>
     </div>
   );
