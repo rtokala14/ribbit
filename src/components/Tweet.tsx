@@ -20,7 +20,7 @@ export default function Tweet({ tweet }: { tweet: Tweet }) {
       });
     },
   });
-  //   const router = useRouter();
+  // const router = useRouter();
   return (
     <div
       //   onClick={() => void router.push(`/p/${tweet.id ?? ""}`)}
@@ -80,9 +80,9 @@ export default function Tweet({ tweet }: { tweet: Tweet }) {
             </ul>
           </div>
         </div>
-        <div className="">
+        <Link href={`/p/${tweet.id}`} className="">
           <p className="text-base">{tweet.content}</p>
-        </div>
+        </Link>
       </div>
     </div>
   );
