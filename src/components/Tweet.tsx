@@ -141,7 +141,12 @@ export default function Tweet({ tweet }: { tweet: Tweet }) {
                   tweetId: tweet.id,
                 });
             }}
-            className="flex items-center gap-2 hover:cursor-pointer hover:text-red-400"
+            className={`flex items-center gap-2 hover:cursor-pointer ${
+              tweet.likes.filter((l) => l.userId === sessionData?.user.id)
+                .length == 1
+                ? "text-red-400"
+                : "hover:text-red-400"
+            }`}
           >
             <Heart className="h-5 w-5" />
             <span className="text-xs font-extralight">
