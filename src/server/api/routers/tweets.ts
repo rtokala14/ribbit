@@ -13,6 +13,7 @@ export const tweetRouter = createTRPCRouter({
     const res = await prisma.tweet.findMany({
       include: {
         author: true,
+        likes: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -64,6 +65,7 @@ export const tweetRouter = createTRPCRouter({
         },
         include: {
           author: true,
+          likes: true,
         },
         orderBy: {
           createdAt: "desc",
@@ -114,6 +116,7 @@ export const tweetRouter = createTRPCRouter({
         },
         include: {
           author: true,
+          likes: true,
         },
       });
 
